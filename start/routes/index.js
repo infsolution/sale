@@ -16,6 +16,10 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
+require('./auth')
+require('./admin')
+require('./manager')
+require('./client')
 Route.get('/', () => {
   return { greeting: 'Hello world in JSON' }
 })
