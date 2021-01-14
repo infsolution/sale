@@ -1,66 +1,58 @@
 'use strict'
-
-const Store = use('App/Models/Store')
-const Role = use('Role')
-const Database = use('Database')
 const User = use('App/Models/User')
-
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 /**
- * Resourceful controller for interacting with stores
+ * Resourceful controller for interacting with clients
  */
-class StoreController {
+class ClientController {
   /**
-   * Show a list of all stores.
-   * GET stores
+   * Show a list of all clients.
+   * GET clients
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, auth }) {
+  async index ({ request, response, view }) {
     try {
-      const store = await Store.query().where('user_id', auth.user.id).first()
-      return response.send({store})
+      const users = await User.query().with('role').fetch()
+      return response.send({users})
     } catch (error) {
       return response.status(400).send({error:error.message})
     }
+
   }
 
+  /**
+   * Render a form to be used for creating a new client.
+   * GET clients/create
+   *
+   * @param {object} ctx
+   * @param {Request} ctx.request
+   * @param {Response} ctx.response
+   * @param {View} ctx.view
+   */
+  async create ({ request, response, view }) {
+  }
 
   /**
-   * Create/save a new store.
-   * POST stores
+   * Create/save a new client.
+   * POST clients
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response, auth }) {
-    const trx = await Database.beginTransaction()
-    try {
-      const data = request.all()
-      const user = await User.find(auth.user.id)
-      const userRole = await Role.findBy('slug', 'manager')
-      //await user.roles().detach()
-      await user.roles().attach([userRole.id], null, trx)
-      const store = await Store.create({...data, user_id:user.id},trx)
-      await trx.commit()
-      return response.status(201).send({store})
-    } catch (error) {
-      console.log(error)
-      await trx.rollback()
-      return response.status(400).send({error:error.message})
-    }
+  async store ({ request, response }) {
   }
 
   /**
-   * Display a single store.
-   * GET stores/:id
+   * Display a single client.
+   * GET clients/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -71,8 +63,8 @@ class StoreController {
   }
 
   /**
-   * Render a form to update an existing store.
-   * GET stores/:id/edit
+   * Render a form to update an existing client.
+   * GET clients/:id/edit
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -83,8 +75,8 @@ class StoreController {
   }
 
   /**
-   * Update store details.
-   * PUT or PATCH stores/:id
+   * Update client details.
+   * PUT or PATCH clients/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -94,8 +86,8 @@ class StoreController {
   }
 
   /**
-   * Delete a store with id.
-   * DELETE stores/:id
+   * Delete a client with id.
+   * DELETE clients/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -105,4 +97,4 @@ class StoreController {
   }
 }
 
-module.exports = StoreController
+module.exports = ClientController

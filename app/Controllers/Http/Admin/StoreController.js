@@ -1,10 +1,5 @@
 'use strict'
-
 const Store = use('App/Models/Store')
-const Role = use('Role')
-const Database = use('Database')
-const User = use('App/Models/User')
-
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
@@ -22,15 +17,26 @@ class StoreController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, auth }) {
+  async index ({ request, response, view }) {
     try {
-      const store = await Store.query().where('user_id', auth.user.id).first()
-      return response.send({store})
+      const stores = await Store.all()
+      return response.send({stores})
     } catch (error) {
-      return response.status(400).send({error:error.message})
+
     }
   }
 
+  /**
+   * Render a form to be used for creating a new store.
+   * GET stores/create
+   *
+   * @param {object} ctx
+   * @param {Request} ctx.request
+   * @param {Response} ctx.response
+   * @param {View} ctx.view
+   */
+  async create ({ request, response, view }) {
+  }
 
   /**
    * Create/save a new store.
@@ -40,22 +46,7 @@ class StoreController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response, auth }) {
-    const trx = await Database.beginTransaction()
-    try {
-      const data = request.all()
-      const user = await User.find(auth.user.id)
-      const userRole = await Role.findBy('slug', 'manager')
-      //await user.roles().detach()
-      await user.roles().attach([userRole.id], null, trx)
-      const store = await Store.create({...data, user_id:user.id},trx)
-      await trx.commit()
-      return response.status(201).send({store})
-    } catch (error) {
-      console.log(error)
-      await trx.rollback()
-      return response.status(400).send({error:error.message})
-    }
+  async store ({ request, response }) {
   }
 
   /**

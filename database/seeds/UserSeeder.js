@@ -49,6 +49,15 @@ class UserSeeder {
     const category = await Category.create({
       name:'Pizzaria'
     })
+    const cat_restaurante = await Category.create({
+      name:'Restaurante'
+    })
+    const cat_lachonete = await Category.create({
+      name:'Lanchonete'
+    })
+    const cat_confeccoao = await Category.create({
+      name:'Confecção'
+    })
     const address = await Address.create({
       street:'Quadra U',
       number: '8',
