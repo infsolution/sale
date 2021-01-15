@@ -1,16 +1,16 @@
 'use strict'
-const Store = use('App/Models/Store')
+
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 /**
- * Resourceful controller for interacting with stores
+ * Resourceful controller for interacting with products
  */
-class StoreController {
+class ProductController {
   /**
-   * Show a list of all stores.
-   * GET stores
+   * Show a list of all products.
+   * GET products
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -18,18 +18,11 @@ class StoreController {
    * @param {View} ctx.view
    */
   async index ({ request, response, view }) {
-    try {
-      const stores = await Store.query().with('manager').first()
-      return response.send({stores})
-    } catch (error) {
-      console.log(error)
-      return response.status(400).send({error:error.message})
-    }
   }
 
   /**
-   * Render a form to be used for creating a new store.
-   * GET stores/create
+   * Render a form to be used for creating a new product.
+   * GET products/create
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -40,8 +33,8 @@ class StoreController {
   }
 
   /**
-   * Create/save a new store.
-   * POST stores
+   * Create/save a new product.
+   * POST products
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -51,8 +44,8 @@ class StoreController {
   }
 
   /**
-   * Display a single store.
-   * GET stores/:id
+   * Display a single product.
+   * GET products/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -63,8 +56,8 @@ class StoreController {
   }
 
   /**
-   * Render a form to update an existing store.
-   * GET stores/:id/edit
+   * Render a form to update an existing product.
+   * GET products/:id/edit
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -75,8 +68,8 @@ class StoreController {
   }
 
   /**
-   * Update store details.
-   * PUT or PATCH stores/:id
+   * Update product details.
+   * PUT or PATCH products/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -86,8 +79,8 @@ class StoreController {
   }
 
   /**
-   * Delete a store with id.
-   * DELETE stores/:id
+   * Delete a product with id.
+   * DELETE products/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -97,4 +90,4 @@ class StoreController {
   }
 }
 
-module.exports = StoreController
+module.exports = ProductController
