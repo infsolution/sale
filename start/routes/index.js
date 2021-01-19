@@ -20,6 +20,6 @@ require('./auth')
 require('./admin')
 require('./manager')
 require('./client')
-Route.get('/', () => {
-  return { greeting: 'Hello world in JSON' }
-})
+Route.get('v1/store','StoreController.index').as('store.all')
+Route.get('v1/store/:slug','StoreController.show').as('store.one')
+Route.get('v1/store/:slug/product/:id','StoreController.product').as('store.product')

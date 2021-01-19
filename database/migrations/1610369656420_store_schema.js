@@ -8,6 +8,7 @@ class StoreSchema extends Schema {
     this.create('stores', (table) => {
       table.increments()
       table.string('name',80).notNullable().unique()
+      table.string('slug',80).notNullable().unique()
       table.string('cnpj',15)
       table.integer('address_id').unsigned()
       table.integer('category_store_id').unsigned().notNullable()

@@ -70,6 +70,7 @@ class UserSeeder {
     })
     const store = await Store.create({
       name:'Bazinga Pizzaria',
+      slug:'bazinga-pizzaria',
       cnpj:'125496166313515',
       address_id:address.id,
       category_store_id:category.id,
