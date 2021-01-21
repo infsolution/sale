@@ -44,7 +44,7 @@ class AttributeController {
     try {
       const data = request.all()
       const store = await Store.findBy('user_id', auth.user.id)
-      const attribute = await Attribue.create({...data, store_id:store.id})
+      const attribute = await Attribue.create({...data, store_id:store.id, owner:store.id})
       return response.status(201).send({attribute})
     } catch (error) {
       return response.status(400).send({error:error.message})
@@ -72,7 +72,6 @@ class AttributeController {
       .with('values')
       .first()
       return response.send({attribute})
-
     } catch (error) {
       console.log(error)
       return response.status(400).send({error:error.message})
@@ -99,7 +98,6 @@ class AttributeController {
       attribute.merge({...data})
       await attribute.save()
       return response.send({attribute})
-
     } catch (error) {
       console.log(error)
       return response.status(400).send({error:error.message})
@@ -114,7 +112,7 @@ class AttributeController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+  async destroy ({ params, request, response, auth }) {
     try {
       const store = await Store.findBy('user_id', auth.user.id)
       if(!store){
@@ -123,7 +121,6 @@ class AttributeController {
       const attribute = await Attribue.query().where('store_id', store.id).where('id', params.id).first()
       await attribute.delete()
       return response.status(204).send({})
-
     } catch (error) {
       console.log(error)
       return response.status(400).send({error:error.message})

@@ -10,6 +10,7 @@ class ProductSchema extends Schema {
       table.string('name',80).notNullable()
       table.float('value', 8, 2).notNullable()
       table.string('description', 512)
+      table.integer('owner').notNullable()
       table.timestamps()
       table.integer('ranking').notNullable().defaultTo(0)
       table.integer('category_id')

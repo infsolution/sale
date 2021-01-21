@@ -11,6 +11,7 @@ class ValueAttributeSchema extends Schema {
       table.string('description')
       table.integer('max_item').notNullable().defaultTo(1)
       table.float('additional_value', 8, 2).defaultTo(0)
+      table.integer('owner').notNullable()
       table.timestamps()
       table.integer('attribute_id').notNullable()
       table.foreign('attribute_id').references('attributes.id').onDelete('cascade')

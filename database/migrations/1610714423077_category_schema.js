@@ -9,6 +9,7 @@ class CategorySchema extends Schema {
       table.increments()
       table.string('name')
       table.integer('store_id')
+      table.integer('owner').notNullable()
       table.timestamps()
       table.foreign('store_id').references('stores.id').onDelete('cascade')
     })

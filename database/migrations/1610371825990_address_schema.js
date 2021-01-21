@@ -15,6 +15,7 @@ class AddressSchema extends Schema {
       table.string('country', 128)
       table.string('zipcode',12)
       table.string('reference')
+      table.integer('store_id').notNullable()
       table.timestamps()
     })
   }

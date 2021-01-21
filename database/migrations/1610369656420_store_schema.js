@@ -10,7 +10,6 @@ class StoreSchema extends Schema {
       table.string('name',80).notNullable().unique()
       table.string('slug',80).notNullable().unique()
       table.string('cnpj',15)
-      table.integer('address_id').unsigned()
       table.integer('category_store_id').unsigned().notNullable()
       table.integer('user_id').unsigned().notNullable()
       table.foreign('category_store_id').references('category_stores.id').onDelete('set null')

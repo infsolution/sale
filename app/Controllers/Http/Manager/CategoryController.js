@@ -49,7 +49,7 @@ class CategoryController {
       if(!store){
         return response.status(404).send({Error:'Store not found!'})
       }
-      const category = await Category.create({...data, store_id:store.id})
+      const category = await Category.create({...data, store_id:store.id, owner: store.id})
       return response.status(201).send({category})
     } catch (error) {
       return response.status(400).send({error:error.message})

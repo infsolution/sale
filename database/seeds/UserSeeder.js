@@ -58,6 +58,15 @@ class UserSeeder {
     const cat_confeccoao = await Category.create({
       name:'Confecção'
     })
+
+    const store = await Store.create({
+      name:'Bazinga Pizzaria',
+      slug:'bazinga-pizzaria',
+      cnpj:'125496166313515',
+      category_store_id:category.id,
+      user_id:manager.id
+    })
+
     const address = await Address.create({
       street:'Quadra U',
       number: '8',
@@ -66,15 +75,8 @@ class UserSeeder {
       state:'MA',
       country:'Brazil',
       zipcode:'65631020',
-      reference:'Quarta rua'
-    })
-    const store = await Store.create({
-      name:'Bazinga Pizzaria',
-      slug:'bazinga-pizzaria',
-      cnpj:'125496166313515',
-      address_id:address.id,
-      category_store_id:category.id,
-      user_id:manager.id
+      reference:'Quarta rua',
+      store_id:store.id
     })
   }
 }

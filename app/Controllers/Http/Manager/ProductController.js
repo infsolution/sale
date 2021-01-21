@@ -21,26 +21,16 @@ class ProductController {
    */
   async index ({ request, response, auth }) {
     try {
-      const products = []
       const store = await Store.findBy('user_id', auth.user.id)
       if(!store){
         return response.status(404).send({Error:'Store not dound!'})
       }
-      const categories = await Category.query().where('store_id',store.id).fetch()
-      await Promise.all(categories.rows.map(async category=>{
-        const prods = await Product.query().where('category_id', category.id).fetch()
-        await Promise.all(
-          prods.rows.map(async prod=>{
-            products.push(prod)
-          })
-        )
-      }))
+      const products = await Product.query().where('owner',store.id).fetch()
       return response.send({products})
     } catch (error) {
       return response.status(400).send({error:error.message})
     }
   }
-
 
   /**
    * Create/save a new product.
@@ -50,10 +40,14 @@ class ProductController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
+  async store ({ request, response, auth }) {
     try {
       const data = request.all()
-      const product = await Product.create({...data})
+      const store = await Store.findBy('user_id', auth.user.id)
+      if(!store){
+        return response.status(404).send({message:'Store not found!'})
+      }
+      const product = await Product.create({...data, owner: store.id})
       return response.status(201).send({product})
     } catch (error) {
       return response.status(400).send({error:error.message})
@@ -71,7 +65,16 @@ class ProductController {
    */
   async show ({ params, request, response, auth }) {
     try {
-      const product = await Product.query().where('id', params.id).fetch()
+      const store = await Store.findBy('user_id', auth.user.id)
+      if(!store){
+        return response.status(404).send({message:'Store not found!'})
+      }
+      const product = await Product.query().where('id', params.id)
+      .where('owner', store.id)
+      .first()
+      if(!product){
+        return response.status(404).send({message:'Product not found!'})
+      }
       return response.send({product})
     } catch (error) {
       return response.status(400).send({error:error.message})
@@ -87,10 +90,19 @@ class ProductController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+  async update ({ params, request, response, auth }) {
     try {
       const data = request.all()
-      const product = await Product.query().where('id', params.id).first()
+      const store = await Store.findBy('user_id', auth.user.id)
+      if(!store){
+        return response.status(404).send({message:'Store not found!'})
+      }
+      const product = await Product.query().where('id', params.id)
+      .where('owner', store.id)
+      .first()
+      if(!product){
+        return response.status(404).send({message:'Product not found!'})
+      }
       product.merge({...data})
       await product.save()
       return response.send({product})
@@ -107,10 +119,19 @@ class ProductController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+  async destroy ({ params, request, response, auth }) {
     try {
-      const product = await Product.query().where('id', params.id).first()
-      product.delete()
+      const store = await Store.findBy('user_id', auth.user.id)
+      if(!store){
+        return response.status(404).send({message:'Store not found!'})
+      }
+      const product = await Product.query().where('id', params.id)
+      .where('owner', store.id)
+      .first()
+      if(!product){
+        return response.status(404).send({message:'Product not found!'})
+      }
+      await product.delete()
       return response.status(204).send({})
     } catch (error) {
       return response.status(400).send({error:error.message})
