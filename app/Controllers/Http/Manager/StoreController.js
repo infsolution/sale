@@ -24,7 +24,9 @@ class StoreController {
    */
   async index ({ request, response, auth }) {
     try {
-      const store = await Store.query().where('user_id', auth.user.id).first()
+      const store = await Store.query().where('user_id', auth.user.id)
+      .with('address')
+      .first()
       return response.send({store})
     } catch (error) {
       return response.status(400).send({error:error.message})

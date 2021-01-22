@@ -4,6 +4,9 @@
 const Model = use('Model')
 
 class Order extends Model {
+  itens(){
+    return this.hasMany('App/Models/ItemOrder')
+  }
 }
 
 module.exports = Order

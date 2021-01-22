@@ -76,8 +76,8 @@ class UserSeeder {
       country:'Brazil',
       zipcode:'65631020',
       reference:'Quarta rua',
-      store_id:store.id
     })
+    await store.address().attach([address.id])
   }
 }
 

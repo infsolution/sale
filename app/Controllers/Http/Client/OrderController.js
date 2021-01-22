@@ -2,6 +2,9 @@
 
 const Store = use('App/Models/Store')
 const Order = use('App/Models/Order')
+const Item = use('App/Models/ItemOrder')
+const Client = use('App/Models/Client')
+const User = use('App/Models/User')
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */

@@ -11,7 +11,7 @@ class Store extends Model {
     return this.hasMany('App/Models/Category')
   }
   address(){
-    return this.belongsTo('App/Models/Address')
+    return this.belongsToMany('App/Models/Address').pivotTable('address_users')
   }
 }
 
