@@ -47,7 +47,16 @@ class OrderController {
       if(!store){
         return response.status(404).send({message:'Store not found!'})
       }
-      const order = await Order.create({...data, status:'RECEBIDO', user_id:auth.user.id})
+      const client = await store.clients()
+      .where('user_id', auth.user.id).where('store_id', store.id).first()
+      if(!client){
+        store.clients().attach([auth.user.id])
+      }
+      const order = await Order.create({message:data.message, value:data.value,
+        status:'RECEBIDO', user_id:auth.user.id, store_id:store.id})
+      await Promise.all(data.itens.map(async item=>{
+        console.log(item)
+      }))
       return response.status(201).send({order})
     } catch (error) {
       return response.status(400).send({error:error.message})

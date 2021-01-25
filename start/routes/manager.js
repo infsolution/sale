@@ -9,4 +9,5 @@ Route.group(()=>{
     Route.resource('product', 'ProductController').apiOnly()
     Route.resource('attribute', 'AttributeController').apiOnly()
     Route.resource('value-attribute', 'AttributeValueController').apiOnly()
+    Route.resource('client', 'ClientController').apiOnly()
 }).prefix('v1/manager').namespace('Manager').middleware(['auth','is:manager'])

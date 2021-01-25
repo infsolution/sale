@@ -13,6 +13,9 @@ class Store extends Model {
   address(){
     return this.belongsToMany('App/Models/Address').pivotTable('address_users')
   }
+  clients(){
+    return this.belongsToMany('App/Models/User')
+  }
 }
 
 module.exports = Store

@@ -5,9 +5,8 @@ const Schema = use('Schema')
 
 class CreateClientSchema extends Schema {
   up () {
-    this.create('clients', (table) => {
+    this.create('store_user', (table) => {
       table.increments()
-      table.string('name', 80).notNullable()
       table.timestamps()
       table.integer('store_id').notNullable()
       table.integer('user_id').notNullable()
@@ -17,7 +16,7 @@ class CreateClientSchema extends Schema {
   }
 
   down () {
-    this.drop('clients')
+    this.drop('store_user')
   }
 }
 
