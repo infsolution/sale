@@ -5,6 +5,7 @@ const Order = use('App/Models/Order')
 const Item = use('App/Models/ItemOrder')
 const Client = use('App/Models/Client')
 const User = use('App/Models/User')
+const Product = use('App/Models/Product')
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
@@ -55,7 +56,11 @@ class OrderController {
       const order = await Order.create({message:data.message, value:data.value,
         status:'RECEBIDO', user_id:auth.user.id, store_id:store.id})
       await Promise.all(data.itens.map(async item=>{
-        console.log(item)
+        const product = await Product.find(item.product_id)
+        const item_order = await Item.create({product_name:product.name, product_value:product.value,
+          quantity:item.quantity, observation:item.observation, product_id:product.id,
+        order_id:order.id, value:product.value})
+        console.log(item_order)
       }))
       return response.status(201).send({order})
     } catch (error) {
