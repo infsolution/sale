@@ -3,6 +3,8 @@
 const Store = use('App/Models/Store')
 const Order = use('App/Models/Order')
 const Item = use('App/Models/ItemOrder')
+const ItemAttribute = use('App/Models/ItemAttribute')
+const ItemAttributeValue = use('App/Models/itemAttributeValue')
 const Client = use('App/Models/Client')
 const User = use('App/Models/User')
 const Product = use('App/Models/Product')
@@ -57,9 +59,15 @@ class OrderController {
         status:'RECEBIDO', user_id:auth.user.id, store_id:store.id})
       await Promise.all(data.itens.map(async item=>{
         const product = await Product.find(item.product_id)
-        const item_order = await Item.create({product_name:product.name, product_value:product.value,
+        const item_order = await Item.create({product_name:product.name, value:product.value,
           quantity:item.quantity, observation:item.observation, product_id:product.id,
-        order_id:order.id, value:product.value})
+        order_id:order.id})
+        await Promise.all(item.attributes.map(async attr=>{
+          console.log(attr)
+          await Promise.all(attr.values.map(async value=>{
+            console.log(value)
+          }))
+        }))
         console.log(item_order)
       }))
       return response.status(201).send({order})
