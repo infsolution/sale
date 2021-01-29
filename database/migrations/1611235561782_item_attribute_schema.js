@@ -9,6 +9,8 @@ class ItemAttributeSchema extends Schema {
       table.increments()
       table.string('attribute_name').notNullable()
       table.integer('quantity').notNullable()
+      table.string('attribute_description', 180)
+      table.float('additional_value', 8, 2).notNullable().defaultTo(0)
       table.timestamps()
       table.integer('item_order_id').notNullable()
       table.foreign('item_order_id').references('item_orders.id').onDelete('cascade').onUpdate('cascade')

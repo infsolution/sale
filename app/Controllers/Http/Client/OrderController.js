@@ -2,6 +2,8 @@
 
 const Store = use('App/Models/Store')
 const Order = use('App/Models/Order')
+const Attribute = use('App/Models/Attribute')
+const ValueAttribute = use('App/Models/ValueAttribute')
 const Item = use('App/Models/ItemOrder')
 const ItemAttribute = use('App/Models/ItemAttribute')
 const ItemAttributeValue = use('App/Models/itemAttributeValue')
@@ -64,6 +66,8 @@ class OrderController {
         order_id:order.id})
         await Promise.all(item.attributes.map(async attr=>{
           console.log(attr)
+          const attribute = await Attribute.find(attr.attribute_id)
+          const order_attribute = await ItemAttribute.create({attribute_name:attribute.title, quantity:attr.quantity})
           await Promise.all(attr.values.map(async value=>{
             console.log(value)
           }))
