@@ -11,7 +11,7 @@ class ItemOrderSchema extends Schema {
       table.float('product_value', 8, 2).notNullable()
       table.integer('quantity').notNullable()
       table.float('value', 8, 2).notNullable()
-      table.string('observation')
+      table.string('description')
       table.integer('order_id').notNullable()
       table.integer('product_id').notNullable()
       table.foreign('order_id').references('orders.id').onDelete('cascade').onUpdate('cascade')

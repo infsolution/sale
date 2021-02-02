@@ -5,8 +5,6 @@ const Order = use('App/Models/Order')
 const Attribute = use('App/Models/Attribute')
 const ValueAttribute = use('App/Models/ValueAttribute')
 const Item = use('App/Models/ItemOrder')
-const ItemAttribute = use('App/Models/ItemAttribute')
-const ItemAttributeValue = use('App/Models/itemAttributeValue')
 const Client = use('App/Models/Client')
 const User = use('App/Models/User')
 const Product = use('App/Models/Product')
@@ -29,7 +27,9 @@ class OrderController {
    */
   async index ({ request, response, auth }) {
     try {
-      const orders = await Order.query().where('user_id', auth.user.id).fetch()
+      const orders = await Order.query().where('user_id', auth.user.id)
+      .with('itens')
+      .fetch()
       return response.send({orders})
     } catch (error) {
       return response.status(400).send({error:error.message})
@@ -61,21 +61,24 @@ class OrderController {
         status:'RECEBIDO', user_id:auth.user.id, store_id:store.id})
       await Promise.all(data.itens.map(async item=>{
         const product = await Product.find(item.product_id)
-        const item_order = await Item.create({product_name:product.name, value:product.value,
-          quantity:item.quantity, observation:item.observation, product_id:product.id,
-        order_id:order.id})
+        if(!product){
+          return response.status(404).send({message:'Product not found!'})
+        }
+          let description = ''
         await Promise.all(item.attributes.map(async attr=>{
-          console.log(attr)
-          const attribute = await Attribute.find(attr.attribute_id)
-          const order_attribute = await ItemAttribute.create({attribute_name:attribute.title, quantity:attr.quantity})
-          await Promise.all(attr.values.map(async value=>{
-            console.log(value)
-          }))
+          //const attribute = await Attribute.find(attr.attribute_id)
+          description+=attr.attribute_description
         }))
-        console.log(item_order)
+        const item_order = await Item.create({product_name:product.name,
+          product_value: product.value,
+          value:product.value * item.quantity + item.additional_value,
+          quantity:item.quantity,
+          description:item.attribute_description,
+          product_id:product.id, order_id:order.id})
       }))
       return response.status(201).send({order})
     } catch (error) {
+      console.log(error)
       return response.status(400).send({error:error.message})
     }
   }
