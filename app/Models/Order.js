@@ -7,6 +7,12 @@ class Order extends Model {
   itens(){
     return this.hasMany('App/Models/ItemOrder')
   }
+  client(){
+    return this.hasOne('App/Models/User')
+  }
+  store(){
+    return this.hasOne('App/Models/Store')
+  }
 }
 
 module.exports = Order

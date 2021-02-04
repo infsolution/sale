@@ -5,7 +5,7 @@ const Schema = use('Schema')
 
 class CreateAttributeProductSchema extends Schema {
   up () {
-    this.create('attribute_products', (table) => {
+    this.create('attribute_product', (table) => {
       table.increments()
       table.integer('attribute_id').notNullable()
       table.foreign('attribute_id').references('attributes.id').onDelete('cascade')
@@ -16,7 +16,7 @@ class CreateAttributeProductSchema extends Schema {
   }
 
   down () {
-    this.drop('attribute_products')
+    this.drop('attribute_product')
   }
 }
 

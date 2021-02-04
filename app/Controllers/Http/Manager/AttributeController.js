@@ -1,5 +1,6 @@
 'use strict'
 const Attribue = use('App/Models/Attribute')
+const Product = use('App/Models/Product')
 const Store = use('App/Models/Store')
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -77,7 +78,31 @@ class AttributeController {
       return response.status(400).send({error:error.message})
     }
   }
-
+ /**
+   *
+   * @param {object} ctx
+   * @param {Request} ctx.request
+   * @param {Response} ctx.response
+   * @param {View} ctx.view
+   */
+  async edit ({ params, request, response, auth }) {
+    try {
+      const product = await Product.find(params.product_id)
+      if(!product){
+        return response.status(404).send({message:'Product not foud!'})
+      }
+      const attribute = await Attribue.find(params.attribute_id)
+      if(!attribute){
+        return response.status(404).send({message:'Attribute not foud!'})
+      }
+      await product.attributes().attach([attribute.id])
+      await product.load('attributes')
+      return response.send({product})
+    } catch (error) {
+      console.log(error)
+      return response.status(400).send({error:error.message})
+    }
+  }
 
   /**
    * Update attribute details.

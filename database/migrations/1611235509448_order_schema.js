@@ -9,7 +9,7 @@ class OrderSchema extends Schema {
       table.increments()
       table.string('message',512)
       table.float('value', 8,2)
-      table.enu('status',['RECEBIDO', 'PREPARANDO', 'A CAMINHO', 'ENTREGE'])
+      table.enu('status',['RECEBIDO', 'PREPARANDO', 'A CAMINHO', 'ENTREGE', 'CANCELADO'])
       table.integer('user_id').notNullable()
       table.integer('store_id').notNullable()
       table.timestamps()

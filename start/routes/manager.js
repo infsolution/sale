@@ -8,6 +8,8 @@ Route.group(()=>{
     Route.resource('category', 'CategoryController').apiOnly()
     Route.resource('product', 'ProductController').apiOnly()
     Route.resource('attribute', 'AttributeController').apiOnly()
+    Route.put('attribute/:attribute_id/product/:product_id', 'AttributeController.edit').as('product.attribute')
     Route.resource('value-attribute', 'AttributeValueController').apiOnly()
+    Route.resource('order', 'OrderController').apiOnly()
     Route.resource('client', 'ClientController').apiOnly()
 }).prefix('v1/manager').namespace('Manager').middleware(['auth','is:manager'])

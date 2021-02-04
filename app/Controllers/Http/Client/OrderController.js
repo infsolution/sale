@@ -65,17 +65,21 @@ class OrderController {
           return response.status(404).send({message:'Product not found!'})
         }
           let description = ''
+          let additional = 0
         await Promise.all(item.attributes.map(async attr=>{
-          //const attribute = await Attribute.find(attr.attribute_id)
-          description+=attr.attribute_description
+          const attribute = await Attribute.find(attr.attribute_id)
+          description+= ' '+attribute.title+': '+attr.attribute_description
+          additional += attr.quantity * attr.additional_value
         }))
         const item_order = await Item.create({product_name:product.name,
           product_value: product.value,
-          value:product.value * item.quantity + item.additional_value,
+          value:additional+product.value,
           quantity:item.quantity,
-          description:item.attribute_description,
+          description:description,
           product_id:product.id, order_id:order.id})
+          order.value += item_order.value
       }))
+      await order.save()
       return response.status(201).send({order})
     } catch (error) {
       console.log(error)
