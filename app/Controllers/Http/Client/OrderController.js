@@ -77,7 +77,7 @@ class OrderController {
           quantity:item.quantity,
           description:description,
           product_id:product.id, order_id:order.id})
-          order.value += item_order.value
+          order.value += item_order.value * item.quantity
       }))
       await order.save()
       return response.status(201).send({order})
@@ -96,7 +96,19 @@ class OrderController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
+  async show ({ params, request, response, auth }) {
+    try {
+      const order = await Order.query().where('id',params.id)
+      .where('user_id', auth.user.id)
+      .with('itens')
+      .first()
+      if(!order){
+        return response.status(404).send({message: 'Order not found!'})
+      }
+      return response.send({order})
+    } catch (error) {
+      return response.status(400).send({error:error.message})
+    }
   }
 
   /**
@@ -119,7 +131,21 @@ class OrderController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+  async update ({ params, request, response,auth }) {
+    try {
+      const data = request.all()
+      const order = await Order.query().where('id', params.id)
+      .where('user_id', auth.user.id).first()
+      if(!order){
+        return response.status(404).send({message:'Order not found!'})
+      }
+      order.merge({...data})
+      await order.save()
+      return response.send({order})
+
+    } catch (error) {
+      return response.status(400).send({error:error.message})
+    }
   }
 
   /**
@@ -130,7 +156,8 @@ class OrderController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+  async destroy ({ params, request, response, auth }) {
+
   }
 }
 

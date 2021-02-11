@@ -16,6 +16,9 @@ class Store extends Model {
   clients(){
     return this.belongsToMany('App/Models/User')
   }
+  category(){
+    return this.belongsTo('App/Models/CategoryStore')
+  }
 }
 
 module.exports = Store

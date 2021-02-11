@@ -4,6 +4,9 @@
 const Model = use('Model')
 
 class CategoryStore extends Model {
+  stores(){
+    return this.hasMany('App/Models/Store')
+  }
 }
 
 module.exports = CategoryStore

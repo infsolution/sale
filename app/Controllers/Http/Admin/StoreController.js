@@ -19,24 +19,14 @@ class StoreController {
    */
   async index ({ request, response, view }) {
     try {
-      const stores = await Store.query().with('manager').first()
+      const stores = await Store.query().with('manager')
+      .with('category')
+      .first()
       return response.send({stores})
     } catch (error) {
       console.log(error)
       return response.status(400).send({error:error.message})
     }
-  }
-
-  /**
-   * Render a form to be used for creating a new store.
-   * GET stores/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
   }
 
   /**
