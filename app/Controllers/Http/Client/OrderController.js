@@ -112,18 +112,6 @@ class OrderController {
   }
 
   /**
-   * Render a form to update an existing order.
-   * GET orders/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
-
-  /**
    * Update order details.
    * PUT or PATCH orders/:id
    *

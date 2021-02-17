@@ -71,6 +71,7 @@ class ProductController {
       }
       const product = await Product.query().where('id', params.id)
       .where('owner', store.id)
+      .with('images')
       .first()
       if(!product){
         return response.status(404).send({message:'Product not found!'})

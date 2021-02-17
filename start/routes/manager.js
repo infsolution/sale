@@ -12,4 +12,6 @@ Route.group(()=>{
     Route.resource('value-attribute', 'AttributeValueController').apiOnly()
     Route.resource('order', 'OrderController').apiOnly()
     Route.resource('client', 'ClientController').apiOnly()
+    Route.resource('image-product', 'ImageProductController').apiOnly()
+    Route.resource('image-store', 'ImageStoreController').apiOnly()
 }).prefix('v1/manager').namespace('Manager').middleware(['auth','is:manager'])

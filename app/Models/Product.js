@@ -10,6 +10,9 @@ class Product extends Model {
   attributes(){
     return this.belongsToMany('App/Models/Attribute')
   }
+  images(){
+    return this.hasMany('App/Models/ImageProduct')
+  }
 }
 
 module.exports = Product

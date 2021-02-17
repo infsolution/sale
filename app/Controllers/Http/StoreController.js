@@ -111,7 +111,9 @@ class StoreController {
       if(!store){
         return response.status(404).send({message: 'Store not found!'})
       }
-      const product = await Product.query().where('id', params.id).first()
+      const product = await Product.query().where('id', params.id)
+      .with('images')
+      .first()
       return response.send({product})
     } catch (error) {
       return response.status(400).send({error:error.message})
