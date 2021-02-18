@@ -26,6 +26,7 @@ class StoreController {
     try {
       const store = await Store.query().where('user_id', auth.user.id)
       .with('address')
+      .with('images')
       .first()
       return response.send({store})
     } catch (error) {
@@ -79,9 +80,20 @@ class StoreController {
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
-   * @param {View} ctx.view
+   * @param {View} ctx.auth
    */
-  async edit ({ params, request, response, view }) {
+  async edit ({ params, request, response, auth }) {
+    try {
+      const {images} = request.all()
+      const store = await Store.find(params.id)
+      if(!store){
+        return response.status(404).send({message:'Store not found!'})
+      }
+      await store.images().attach(images)
+      return response.send({message:'Images add'})
+    } catch (error) {
+      return response.status(400).send({error:error.message})
+    }
   }
 
   /**
@@ -93,6 +105,7 @@ class StoreController {
    * @param {Response} ctx.response
    */
   async update ({ params, request, response }) {
+
   }
 
   /**

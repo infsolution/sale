@@ -11,7 +11,7 @@ class Product extends Model {
     return this.belongsToMany('App/Models/Attribute')
   }
   images(){
-    return this.hasMany('App/Models/ImageProduct')
+    return this.belongsToMany('App/Models/Image')
   }
 }
 

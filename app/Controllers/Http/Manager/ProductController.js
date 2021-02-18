@@ -53,7 +53,26 @@ class ProductController {
       return response.status(400).send({error:error.message})
     }
   }
-
+  /**
+   * GET products/:id/edit
+   * @param {object} ctx
+   * @param {Request} ctx.request
+   * @param {Response} ctx.response
+   * @param {View} ctx.auth
+   */
+  async edit ({ params, request, response, auth }) {
+    try {
+      const {images} = request.all()
+      const product = await Product.find(params.id)
+      if(!product){
+        return response.status(404).send({message:'Product not found!'})
+      }
+      await product.images().attach(images)
+      return response.send({message:'Images add'})
+    } catch (error) {
+      return response.status(400).send({error:error.message})
+    }
+  }
   /**
    * Display a single product.
    * GET products/:id

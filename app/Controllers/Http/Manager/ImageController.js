@@ -2,7 +2,7 @@
 const Product = use('App/Models/Product')
 const Helpers = use('Helpers')
 const Store = use('App/Models/Store')
-const Image = use('App/Models/ImageProduct')
+const Image = use('App/Models/Image')
 const fs = use('fs')
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -45,14 +45,9 @@ class ImageProductController {
    */
   async store ({ request, response, auth }) {
     try {
-      const {product_id} = request.all()
       const store = await Store.findBy('user_id', auth.user.id)
       if(!store){
         return response.status(404).send({message:'Store not found!'})
-      }
-      const product = await Product.find(product_id)
-      if(!product){
-        return response.status(404).send({message: 'Product not found!'})
       }
       const photos = request.file('file',{
         size: '3mb'
@@ -60,14 +55,14 @@ class ImageProductController {
       if(photos){
         await photos.moveAll(Helpers.tmpPath('photos'), (file) =>{
           return{
-            name: `${product.name.toLowerCase().slice(0,10).replace(" ","_")}_${product.id}_${Date.now()}_${file.clientName.slice(-12)}`.toLowerCase().replace(" ","_")
+            name: `${Date.now()}_${file.clientName.slice(-12)}`.toLowerCase().replace(" ","_")
           }
         })
         if(!photos.movedAll()){
           return photos.errors()
         }
         await Promise.all(
-          photos.movedList().map(item=> Image.create({product_id:product.id, path:item.fileName, owner:store.id}))
+          photos.movedList().map(item=> Image.create({path:item.fileName, owner:store.id}))
         )
         return response.send({message:'Image saved!'})
       }
@@ -109,6 +104,20 @@ class ImageProductController {
    * @param {Response} ctx.response
    */
   async update ({ params, request, response }) {
+    try {
+      const {product_id} = request.all()
+      const product = await Product.find(product_id)
+      if(!product){
+        return response.status(404).send({message:'Product not found!'})
+      }
+      const image = await Image.find(params.id)
+      if(!image){
+        return response.status(404).send({message:'Image not found!'})
+      }
+      await product.images().attach([image.id])
+    } catch (error) {
+      return response.status(400).send({error:error.message})
+    }
   }
 
   /**

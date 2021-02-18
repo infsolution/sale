@@ -5,18 +5,18 @@ const Schema = use('Schema')
 
 class ImageProductSchema extends Schema {
   up () {
-    this.create('image_products', (table) => {
+    this.create('image_product', (table) => {
       table.increments()
       table.timestamps()
-      table.string('path',256).notNullable()
-      table.integer('owner').notNullable()
+      table.integer('image_id').notNullable()
+      table.foreign('image_id').references('images.id').onDelete('cascade')
       table.integer('product_id').notNullable()
       table.foreign('product_id').references('products.id').onDelete('cascade')
     })
   }
 
   down () {
-    this.drop('image_products')
+    this.drop('image_product')
   }
 }
 

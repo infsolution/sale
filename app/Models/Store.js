@@ -19,6 +19,9 @@ class Store extends Model {
   category(){
     return this.belongsTo('App/Models/CategoryStore')
   }
+  images(){
+    return this.belongsToMany('App/Models/Image')
+  }
 }
 
 module.exports = Store
